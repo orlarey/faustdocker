@@ -2,14 +2,12 @@
 ########################################################################
 ########################################################################
 #
-#       		Minimal Faust in a docker
+#       		  Faust in a docker container
 #                 (GRAME / Y. Orlarey)
 #
 ########################################################################
 ########################################################################
 
-# docker build -t grame/faust .
-# docker run -v `pwd`:/tmp grame/faust foo.dsp
 
 FROM alpine:latest 
 
@@ -26,24 +24,16 @@ FROM alpine:latest
 
 RUN apk add --no-cache libstdc++
 
+# We copy all but faust2xxx scripts (they can't be used)
 COPY --from=0 /usr/local/bin/faust /usr/local/bin 
-COPY --from=0 /usr/local/share/faust /usr/local/share/faust
+COPY --from=0 /usr/local/bin/faustoptflags /usr/local/bin 
+COPY --from=0 /usr/local/bin/usage.sh /usr/local/bin 
+COPY --from=0 /usr/local/bin/filename2ident /usr/local/bin/
+COPY --from=0 /usr/local/bin/sound2reader /usr/local/bin/
+COPY --from=0 /usr/local/share/faust/ /usr/local/share/faust/
+COPY --from=0 /usr/local/include/faust/ /usr/local/include/faust/
+
 WORKDIR /tmp
 
 ENTRYPOINT [ "/usr/local/bin/faust" ]
 CMD [ "-v" ]
-
-
-
-
-
-########################################################################
-# HowTo run this docker image
-########################################################################
-# For local tests:
-#-----------------
-# docker run -it -p 80:80 eu.gcr.io/faust-cloud-208407/faustservicecloud:latest
-#
-# For production:
-#-----------------
-# docker run -d --restart=always -p 80:80 eu.gcr.io/faust-cloud-208407/faustservicecloud:latest

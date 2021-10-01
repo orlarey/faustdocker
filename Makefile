@@ -1,7 +1,7 @@
 FAUSTGH="ghcr.io/orlarey/faustdocker"
 
 build:
-	docker build --squash -t $(FAUSTGH):latest .
+	docker build --squash -t $(FAUSTGH):latest -f Dockerfile .
 
 push:
 	docker push $(FAUSTGH):latest
