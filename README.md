@@ -14,23 +14,93 @@ A minimal Docker image embedding the [Faust](https://faust.grame.fr) compiler wi
 - Complete Faust compiler with all standard libraries
 - All architecture files included
 - Supports all code generation backends (C++, C, Rust, LLVM, etc.)
+- Multi-architecture support (AMD64, ARM64) - works on Intel/AMD and Apple Silicon
 - **Note:** `faust2xxx` scripts are not included (binary generation not available)
 
-## Installation
+## Simplified Usage with Wrapper Script
 
-### From GitHub Container Registry
+A convenient bash script `faust` is provided to simplify usage. This script wraps the Docker command so you can use Faust as if it were installed locally. The script automatically downloads the Docker image if it's not already present.
+
+### Installation
+
+#### Option 1: Download from Repository
+
+Copy the script to a directory in your PATH:
 
 ```bash
-docker pull ghcr.io/orlarey/faustdocker:latest
+curl -o faust https://raw.githubusercontent.com/orlarey/faustdocker/main/faust
+sudo mv faust /usr/local/bin/
+sudo chmod +x /usr/local/bin/faust
 ```
 
-### Build Locally
+#### Option 2: Create Manually
+
+Create a file named `faust` with the following content:
 
 ```bash
-make image
+#!/bin/bash
+
+########################################################################
+########################################################################
+#
+#       Faust Docker Wrapper Script
+#       (GRAME / Y. Orlarey)
+#
+#       This script simplifies the usage of the Faust compiler
+#       running in a Docker container.
+#
+########################################################################
+########################################################################
+
+IMAGE="ghcr.io/orlarey/faustdocker:main"
+
+if ! docker image inspect "$IMAGE" &> /dev/null; then docker pull "$IMAGE"; fi
+
+docker run --rm -v "$PWD:/tmp" "$IMAGE" "$@"
 ```
 
-## Usage
+Then make it executable and move it to your PATH:
+
+```bash
+chmod +x faust
+sudo mv faust /usr/local/bin/
+```
+
+#### Option 3: From Cloned Repository
+
+If you have cloned the repository:
+
+```bash
+sudo cp faust /usr/local/bin/
+sudo chmod +x /usr/local/bin/faust
+```
+
+### Usage
+
+Once installed, simply use:
+
+```bash
+faust foo.dsp
+faust -lang cpp -o foo.cpp foo.dsp
+faust -h
+```
+
+### Alternative: Shell Alias
+
+Alternatively, you can create a shell alias without installing the script:
+
+```bash
+alias faust='docker run --rm -v $PWD:/tmp ghcr.io/orlarey/faustdocker'
+```
+
+Then use it the same way:
+
+```bash
+faust foo.dsp
+faust -lang cpp -o foo.cpp foo.dsp
+```
+
+## Direct Docker Usage
 
 ### Display Help
 
@@ -101,50 +171,6 @@ docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -double -o foo.cpp foo.dsp
 
 # With JSON metadata
 docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -json -o foo.cpp foo.dsp
-```
-
-## Simplified Usage with Wrapper Script
-
-A convenient bash script `faust` is provided to simplify usage. This script wraps the Docker command so you can use Faust as if it were installed locally.
-
-### Installation
-
-Copy the script to a directory in your PATH:
-
-```bash
-sudo cp faust /usr/local/bin/
-sudo chmod +x /usr/local/bin/faust
-```
-
-Or add the script's directory to your PATH:
-
-```bash
-export PATH="/path/to/faustdocker:$PATH"
-```
-
-### Usage
-
-Once installed, simply use:
-
-```bash
-faust foo.dsp
-faust -lang cpp -o foo.cpp foo.dsp
-faust -h
-```
-
-### Alternative: Shell Alias
-
-Alternatively, you can create a shell alias without installing the script:
-
-```bash
-alias faust='docker run --rm -v $PWD:/tmp ghcr.io/orlarey/faustdocker'
-```
-
-Then use it the same way:
-
-```bash
-faust foo.dsp
-faust -lang cpp -o foo.cpp foo.dsp
 ```
 
 ## Limitations
