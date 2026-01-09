@@ -2,28 +2,20 @@
 
 A minimal Docker image embedding the [Faust](https://faust.grame.fr) compiler with all standard libraries and architecture files.
 
-**Important:** This image generates source code only (C++, C, Rust, etc.), not executable binaries. The generated source code must be compiled using your local development tools and toolchain.
-
-## About
-
-[Faust](https://faust.grame.fr) (Functional Audio Stream) is a functional programming language specifically designed for real-time audio signal processing and sound synthesis. This Docker image allows you to use the Faust compiler without installing it locally.
-
-## Features
-
 - Lightweight Alpine Linux-based image
 - Complete Faust compiler with all standard libraries
 - All architecture files included
 - Supports all code generation backends (C++, C, Rust, LLVM, etc.)
 - Multi-architecture support (AMD64, ARM64) - works on Intel/AMD and Apple Silicon
-- **Note:** `faust2xxx` scripts are not included (binary generation not available)
 
-## Simplified Usage with Wrapper Script
+**Important:** This image generates source code only (C++, C, Rust, etc.), not executable binaries. The generated source code must be compiled using your local development tools and toolchain.
 
-A convenient bash script `faust` is provided to simplify usage. This script wraps the Docker command so you can use Faust as if it were installed locally. The script automatically downloads the Docker image if it's not already present.
+## `faust` Wrapper Script
 
-### Installation
+A convenient bash script `faust` is provided to simplify usage. This script wraps the Docker command so you can use Faust (nearly) as if it were installed locally. The script automatically downloads the Docker image if it's not already present.
 
-#### Option 1: Download from Repository
+
+### Option 1: Download from Repository
 
 Copy the script to a directory in your PATH:
 
@@ -33,7 +25,7 @@ sudo mv faust /usr/local/bin/
 sudo chmod +x /usr/local/bin/faust
 ```
 
-#### Option 2: Create Manually
+### Option 2: Create Manually
 
 Create a file named `faust` with the following content:
 
@@ -66,15 +58,6 @@ chmod +x faust
 sudo mv faust /usr/local/bin/
 ```
 
-#### Option 3: From Cloned Repository
-
-If you have cloned the repository:
-
-```bash
-sudo cp faust /usr/local/bin/
-sudo chmod +x /usr/local/bin/faust
-```
-
 ### Usage
 
 Once installed, simply use:
@@ -85,22 +68,9 @@ faust -lang cpp -o foo.cpp foo.dsp
 faust -h
 ```
 
-### Alternative: Shell Alias
-
-Alternatively, you can create a shell alias without installing the script:
-
-```bash
-alias faust='docker run --rm -v $PWD:/tmp ghcr.io/orlarey/faustdocker'
-```
-
-Then use it the same way:
-
-```bash
-faust foo.dsp
-faust -lang cpp -o foo.cpp foo.dsp
-```
-
 ## Direct Docker Usage
+
+If you prefer to use Docker directly without the wrapper script, here are some examples:
 
 ### Display Help
 
@@ -128,8 +98,6 @@ To compile a file in a specific directory:
 docker run -v /path/to/directory:/tmp ghcr.io/orlarey/faustdocker foo.dsp
 ```
 
-## Usage Examples
-
 ### Generate C++ Code
 
 ```bash
@@ -151,7 +119,7 @@ docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -lang rust -o foo.rs foo.dsp
 ### Use a Specific Architecture
 
 ```bash
-docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -a juce-plugin.cpp foo.dsp
+docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -i -a juce-plugin.cpp foo.dsp
 ```
 
 ### Generate SVG Diagram
@@ -173,14 +141,11 @@ docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -double -o foo.cpp foo.dsp
 docker run -v $PWD:/tmp ghcr.io/orlarey/faustdocker -json -o foo.cpp foo.dsp
 ```
 
-## Limitations
-
-- `faust2xxx` scripts are **not** available
-- Cannot generate binaries directly (source code only)
-- External dependencies required by `faust2xxx` scripts are not installed
-- Only source code compilation is supported
-
 ## Development
+
+For developers who want to build and customize the Docker image:
+
+
 
 ### Available Commands
 
