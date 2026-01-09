@@ -12,8 +12,8 @@
 ########################################################################
 ########################################################################
 
-# Docker image name
-IMAGE="ghcr.io/orlarey/faustdocker:latest"
+IMAGE="ghcr.io/orlarey/faustdocker:main"
 
-# Run the Faust compiler in Docker, mounting the current directory
+if ! docker image inspect "$IMAGE" &> /dev/null; then docker pull "$IMAGE"; fi
+
 docker run --rm -v "$PWD:/tmp" "$IMAGE" "$@"

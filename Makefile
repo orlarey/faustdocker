@@ -1,13 +1,13 @@
 FAUSTGH="ghcr.io/orlarey/faustdocker"
 
 image:
-	docker build -t $(FAUSTGH):latest .
+	docker build -t $(FAUSTGH):main .
 
 push:
-	docker push $(FAUSTGH):latest
+	docker push $(FAUSTGH):main
 
 test:
-	docker run $(FAUSTGH):latest
+	docker run $(FAUSTGH):main
 
 help:
 	@echo " 'image' : builds the docker image"
