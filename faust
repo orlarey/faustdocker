@@ -1,0 +1,19 @@
+#!/bin/bash
+
+########################################################################
+########################################################################
+#
+#       Faust Docker Wrapper Script
+#       (GRAME / Y. Orlarey)
+#
+#       This script simplifies the usage of the Faust compiler
+#       running in a Docker container.
+#
+########################################################################
+########################################################################
+
+# Docker image name
+IMAGE="ghcr.io/orlarey/faustdocker:latest"
+
+# Run the Faust compiler in Docker, mounting the current directory
+docker run --rm -v "$PWD:/tmp" "$IMAGE" "$@"
