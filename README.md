@@ -36,7 +36,7 @@ Create a file named `faust` with the following content:
 ########################################################################
 #
 #       Faust Docker Wrapper Script
-#       (GRAME / Y. Orlarey)
+#       (Y. Orlarey)
 #
 #       This script simplifies the usage of the Faust compiler
 #       running in a Docker container.
@@ -45,9 +45,6 @@ Create a file named `faust` with the following content:
 ########################################################################
 
 IMAGE="ghcr.io/orlarey/faustdocker:main"
-
-if ! docker image inspect "$IMAGE" &> /dev/null; then docker pull "$IMAGE"; fi
-
 docker run --rm -v "$PWD:/tmp" "$IMAGE" "$@"
 ```
 
