@@ -12,7 +12,6 @@ ARG BASE_IMAGE=alpine:20251224
 
 FROM ${BASE_IMAGE} 
 
-RUN apk update 
 RUN apk add --no-cache gcc musl-dev cmake g++ make git pkgconfig
 
 # Build Faust
