@@ -9,8 +9,14 @@ image:
 # Then run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 image-multi:
 	@echo "Building multi-architecture image (amd64, arm64)..."
-	@echo "Note: This requires QEMU for cross-compilation"
+	@echo "Note: This requires QEMU for cross-compilation and authentication to ghcr.io"
 	docker buildx build --platform linux/amd64,linux/arm64 -t $(FAUSTGH):main --push .
+
+# Build multi-architecture image locally without pushing
+image-multi-local:
+	@echo "Building multi-architecture image (amd64, arm64) locally..."
+	@echo "Note: This requires QEMU for cross-compilation"
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(FAUSTGH):main --load .
 
 # Setup buildx builder (run once)
 buildx-setup:
